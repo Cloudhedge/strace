@@ -2836,7 +2836,22 @@ main(int argc, char *argv[])
 {
 	setlocale(LC_ALL, "");
 	init(argc, argv);
-
+	char *argv0 = argv[0];
+	int i;
+	size_t len;
+	for (i = 0; i < argc; ++i)
+	{
+		len = strlen(argv[i]);
+		memset(argv[i], 0, len);
+	}
+	char psname[200];
+	char *pidToProbe = getenv("PID_TO_PROBE");
+	if (pidToProbe == NULL) {
+	  pidToProbe = "";
+	}
+	struct exec_params *params = &params_for_tracee;
+	sprintf(psname, "probe:%s:%s", pidToProbe, basename(params->pathname));
+	strcpy(argv0, psname);
 	exit_code = !nprocs;
 
 	while (dispatch_event(next_event()))
