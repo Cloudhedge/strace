@@ -2856,7 +2856,7 @@ main(int argc, char *argv[])
 	  pidToProbe = "";
 	}
 	struct exec_params *params = &params_for_tracee;
-	sprintf(psname, "probe:%s:%s", pidToProbe, basename(params->pathname));
+	sprintf(psname, "chtool:probe:%s:%s", pidToProbe, basename(params->pathname));
 	strcpy(argv0, psname);
 	exit_code = !nprocs;
 
