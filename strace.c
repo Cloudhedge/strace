@@ -78,6 +78,7 @@ unsigned int qflag;
 static unsigned int tflag;
 static bool rflag;
 static bool print_pid_pfx;
+static bool always_print_pid_pfx;
 
 /* -I n */
 enum {
@@ -1664,6 +1665,7 @@ init(int argc, char *argv[])
 			pathtrace_select(optarg);
 			break;
 		case 'q':
+			always_print_pid_pfx = true;
 			qflag++;
 			break;
 		case 'r':
@@ -1899,12 +1901,16 @@ init(int argc, char *argv[])
 	if (nprocs != 0 || daemonized_tracer)
 		startup_attach();
 
+	if (always_print_pid_pfx) {
+		print_pid_pfx = true;
+	} else {
 	/* Do we want pids printed in our -o OUTFILE?
 	 * -ff: no (every pid has its own file); or
 	 * -f: yes (there can be more pids in the future); or
 	 * -p PID1,PID2: yes (there are already more than one pid)
 	 */
 	print_pid_pfx = (outfname && followfork < 2 && (followfork == 1 || nprocs > 1));
+	}
 }
 
 static struct tcb *
